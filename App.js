@@ -1,10 +1,10 @@
 import ShoppingListComponent from './shopping-list';
 import ItemDetailComponent from './item-detail';
+import MyOrdersComponent from './my-orders';
 
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { Left, Header, Content, Title, Button, Right,
-  Body, Item, Icon, Input, Text, Container } from 'native-base';
+import { Icon } from 'native-base';
 
 import {
   DrawerNavigator, navigationOptions, StackNavigator
@@ -30,6 +30,16 @@ const HomeStack = StackNavigator({
   }
 });
 
+const OrderStack = StackNavigator({
+  Order: {
+    screen: MyOrdersComponent,
+    navigationOptions: ({ navigation }) =>({
+      title: 'My Orders',
+      headerLeft: <Icon name="menu" size={35} onPress={ () => navigation.navigate('DrawerOpen') } />
+    })
+  }
+});
+
 const Navigation = DrawerNavigator({
   Home: {
     screen: HomeStack,
@@ -40,19 +50,19 @@ const Navigation = DrawerNavigator({
   Item: {
     screen: ItemStack,
     navigationOptions: {
-      title: 'Items',  // Text shown in left menu
+      title: 'Items'  // Text shown in left menu
+    }
+  },
+  Order: {
+    screen: OrderStack,
+    navigationOptions: {
+      title: 'My Orders'
     }
   }
 });
 
 
 class App extends Component {
-  //
-  // toggleDrawer() {
-  //   // drawerPosition = drawerPosition == 'left' ? 'right' : 'left';
-  //   ItemStack;
-  // }
-
   render() {
     return (
       <Navigation></Navigation>
