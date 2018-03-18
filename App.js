@@ -6,35 +6,56 @@ import { View } from 'react-native';
 import { Left, Header, Content, Title, Button, Right,
   Body, Item, Icon, Input, Text, Container } from 'native-base';
 
-
 import {
-  DrawerNavigator,
+  DrawerNavigator, navigationOptions, StackNavigator
 } from 'react-navigation';
 
-const Navigation = DrawerNavigator({
-  Home: { screen: ShoppingListComponent },
-  Item: { screen: ItemDetailComponent }
+const ItemStack = StackNavigator({
+  Item: {
+    screen: ItemDetailComponent,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Items',  // Title to appear in status bar
+      headerLeft: <Icon name="menu" size={35} onPress={ () => navigation.navigate('DrawerOpen') } />
+    })
+  }
 });
 
-class App extends Component {
-
-  toggleDrawer() {
-    console.log('button pressed');
+const HomeStack = StackNavigator({
+  Home: {
+    screen: ShoppingListComponent,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Home',  // Title to appear in status bar
+      headerLeft: <Icon name="menu" size={35} onPress={ () => navigation.navigate('DrawerOpen') } />
+    })
   }
+});
+
+const Navigation = DrawerNavigator({
+  Home: {
+    screen: HomeStack,
+    navigationOptions: {
+      title: 'Home' // Text shown in left menu
+    }
+  },
+  Item: {
+    screen: ItemStack,
+    navigationOptions: {
+      title: 'Items',  // Text shown in left menu
+    }
+  }
+});
+
+
+class App extends Component {
+  //
+  // toggleDrawer() {
+  //   // drawerPosition = drawerPosition == 'left' ? 'right' : 'left';
+  //   ItemStack;
+  // }
 
   render() {
     return (
-      <Container>
-        <Header style={{justifyContent: 'flex-start' }}>
-          <Left>
-            <Button iconLeft onPress={()=>this.toggleDrawer()} transparent>
-              <Icon name='menu' />
-            </Button>
-          </Left>
-        </Header>
-        <Navigation>
-        </Navigation>
-      </Container>
+      <Navigation></Navigation>
     );
   }
 }
