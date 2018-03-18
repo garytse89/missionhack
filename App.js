@@ -12,8 +12,8 @@ import {
 } from 'react-navigation';
 
 const Navigation = DrawerNavigator({
-  Home: { screen: ShoppingListComponent },
-  Item: { screen: ItemDetailComponent }
+  Home: { screen: ItemDetailComponent },
+  // Item: { screen: ItemDetailComponent }
 });
 
 class App extends Component {
