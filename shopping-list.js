@@ -14,8 +14,8 @@ export default class ShoppingListComponent extends Component {
   render() {
     return (
       <Container>
-      <Header><View><Text style={styles.titleText}>We deliver right to you</Text>
-      <Text style={styles.baseText}>Search our extensive inventory below</Text></View></Header>
+      <Header><View><Text style={styles.titleText}>Our drones deliver right to you</Text>
+      <Text style={styles.baseText}>Anywhere, any time, any floor</Text></View></Header>
         <Header searchBar rounded>
           <Item>
             <Icon name="ios-search" />
