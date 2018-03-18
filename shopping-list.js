@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Left, Container, Header, Content, Title, Body, Item, Button, Icon, Input, Text } from 'native-base';
 import { List, ListItem, Thumbnail } from 'native-base';
-import { Col, Row, Grid } from 'react-native-easy-grid';
 
 export default class ShoppingListComponent extends Component {
   render() {
