@@ -1,6 +1,7 @@
 import ShoppingListComponent from './shopping-list';
 import ItemDetailComponent from './item-detail';
 import MyOrdersComponent from './my-orders';
+import OrdersListComponent from './orders-list';
 
 import React, { Component } from 'react';
 import { View } from 'react-native';
@@ -29,7 +30,7 @@ const Stacc = StackNavigator({
 
 const OrderStack = StackNavigator({
   Order: {
-    screen: MyOrdersComponent,
+    screen: OrdersListComponent,
     navigationOptions: ({ navigation }) =>({
       title: 'My Orders',
       headerLeft: <Icon name="menu" size={35} onPress={ () => navigation.navigate('DrawerOpen') } />
