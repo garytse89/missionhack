@@ -23,6 +23,7 @@ export default class OrdersMapComponent extends Component {
     this.orderId;
     this.orderLat;
     this.orderLon;
+    this.floor;
     this.stationPath = [];
     this.consumerPath = [];
   }
@@ -64,7 +65,7 @@ export default class OrdersMapComponent extends Component {
     .then( response => response.json() )
     .then( ( { status, lat: latitude, long: longitude, availability } )=>{
       if (status == "arrived") console.log(status);
-      else { // console.log( availability );
+      else {
       this.drone = {
         title: 'Package',
         description: 'Your package location',
@@ -109,6 +110,7 @@ export default class OrdersMapComponent extends Component {
     this.orderId = params.order.orderId;
     this.orderLat = params.order.lat;
     this.orderLon = params.order.long;
+    this.floor = Math.floor( params.order.alt / 15 )
 
     return (
       <Container>
@@ -126,7 +128,8 @@ export default class OrdersMapComponent extends Component {
         title={this.drone.title}
         description={this.drone.description}
         image={droneImage}
-        centerOffset={{x:5, y:5}}/>
+        centerOffset={{x:-15, y:-10}}
+        anchor={{x:0.5, y:0.5}}/>
       <Polyline
        coordinates={this.stationPath}
        strokeWidth={2}
@@ -140,6 +143,7 @@ export default class OrdersMapComponent extends Component {
         </MapView>
       </View>
       <Button onPress={this.getDronePath.bind(this)} title='Track Package'/>
+      <View style={{marginTop: 400, marginLeft: 75}}><Text style={{fontSize: 36}}>Drone to arrive on floor {this.floor}</Text></View>
       </Container>
     );
     }
