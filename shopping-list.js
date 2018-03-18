@@ -20,7 +20,7 @@ export default class ShoppingListComponent extends Component {
           <Item>
             <Icon name="ios-search" />
             <Input placeholder="Search" />
-            <Icon name="ios-people" />
+            <Icon name="ios-cart" />
           </Item>
           <Button transparent>
             <Text>Search</Text>
