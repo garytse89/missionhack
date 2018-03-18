@@ -49,8 +49,7 @@ export default class OrdersMapComponent extends Component {
   }
 
   getPackageLocation = async () =>{
-    console.log( 'order id =', this.orderId);
-    fetch( 'http://10.104.10.130:3000/packageLocation/' + this.orderId, {
+    fetch( 'http://10.104.11.145:3000/packageLocation/' + this.orderId, {
       method: 'GET',
     })
     .then( response => response.json() )
@@ -69,6 +68,14 @@ export default class OrdersMapComponent extends Component {
     } );
   }
 
+  getDronePath = async () =>{
+    fetch( 'http://10.104.11.145:3000/getPaths?lat=49.2634490&long=-123.1382215', {
+      method: 'GET'
+    } )
+    .then( response => response.json() )
+    .then( response=> console.log( response ) );
+  }
+
   onRegionChangeComplete(region) {
     this.setState({ region });
   }
@@ -77,8 +84,6 @@ export default class OrdersMapComponent extends Component {
 
     const { navigate } = this.props.navigation;
     const { params } = this.props.navigation.state;
-
-    console.log( 'orders-map opens with params=', params);
 
     this.orderId = params.orderId;
 
@@ -99,14 +104,13 @@ export default class OrdersMapComponent extends Component {
         description={this.drone.description}/>
         </MapView>
       </View>
-      <Button onPress={this.getPackageLocation.bind(this)} title='Track Package'/>
+      <Button onPress={this.getDronePath.bind(this)} title='Track Package'/>
       </Container>
     );
     }
 
   componentDidMount() {
     this.interval = setInterval(() => {
-      console.log('should get package location')
       this.getPackageLocation()
       this.setState( this.state );
     }, 1000);

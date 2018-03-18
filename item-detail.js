@@ -9,38 +9,45 @@ export default class ItemDetailComponent extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const { params } = this.props.navigation.state;
+    const gl = navigator.geolocation;
 
     placeOrder = async (item) => {
-      // item not used for the placing of order
+      gl.getCurrentPosition( ( { coords } )=>{
+        console.log('Success!', coords.latitude, coords.longitude, coords.altitude )
 
-      fetch('http://10.104.10.130:3000/placeOrder', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          lat: 49.2634490,
-          long: -123.1382215,
-          alt: 100
+        fetch('http://10.104.11.145:3000/placeOrder', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            lat: coords.latitude,
+            long: coords.longitude,
+            alt: coord.altitude
+          })
         })
-      })
-        .then((response) => response.text())
-        .then((responseText)=>{
+          .then((response) => response.text())
+          .then((responseText)=>{
 
-          const orderId = responseText;
-          // store orderId
-          console.log('Storing the order of item=', item.name, 'as orderid=', orderId);
-          return AsyncStorage.setItem(orderId, item.name);
+            const orderId = responseText;
+            // store orderId
+            console.log('Storing the order of item=', item.name, 'as orderid=', orderId);
+            return AsyncStorage.setItem(orderId, item.name);
 
-        })
-        .then(() => {
+          })
+          .then(() => {
 
-          console.log('--Finished storing order in local database--');
+            console.log('--Finished storing order in local database--');
 
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+      },
+      err=>console.log('error :(', err), { enableHighAccuracy: true } );
+
+
     }
 
     let item = params.item;

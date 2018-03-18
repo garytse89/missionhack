@@ -2,10 +2,12 @@ import ShoppingListComponent from './shopping-list';
 import ItemDetailComponent from './item-detail';
 import OrdersMapComponent from './orders-map';
 import OrdersListComponent from './orders-list';
+import requestGeoLocation from './getPermissions';
 
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { Icon } from 'native-base';
+import { Icon, Text } from 'native-base';
+
 
 import {
   DrawerNavigator, navigationOptions, StackNavigator
@@ -68,7 +70,36 @@ const Navigation = DrawerNavigator({
 
 
 class App extends Component {
+
+constructor() {
+  super();
+  this.state = {
+    loaded: false,
+  };
+}
+
+componentWillMount() {
+  this._loadInitialState().done();
+}
+
+_loadInitialState = async () => {
+  try {
+    await requestGeoLocation();
+    this.setState( { loaded: true } );
+    this.forceUpdate();
+  } catch( err ) {
+  console.error( err );
+  }
+}
+
   render() {
+
+    if (!this.state.loaded) {
+      return (
+        <View><Text>Loading...</Text></View>
+      );
+    }
+
     return (
       <Navigation></Navigation>
     );
