@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Left, Container, Header, Content, Title, Body, Item, Button, Icon, Input, Text } from 'native-base';
 import { List, ListItem, Thumbnail } from 'native-base';
+import { StyleSheet, View } from 'react-native';
 
 export default class ShoppingListComponent extends Component {
 
@@ -13,6 +14,8 @@ export default class ShoppingListComponent extends Component {
   render() {
     return (
       <Container>
+      <Header><View><Text style={styles.titleText}>We deliver right to you</Text>
+      <Text style={styles.baseText}>Search our extensive inventory below</Text></View></Header>
         <Header searchBar rounded>
           <Item>
             <Icon name="ios-search" />
@@ -61,3 +64,15 @@ export default class ShoppingListComponent extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  baseText: {
+    fontFamily: 'Cochin',
+    color:'#fff',
+  },
+  titleText: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+});
