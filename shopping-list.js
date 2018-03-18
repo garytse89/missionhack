@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Left, Container, Header, Content, Title, Body, Item, Button, Icon, Input, Text } from 'native-base';
 import { List, ListItem, Thumbnail } from 'native-base';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 
 export default class ShoppingListComponent extends Component {
 
@@ -58,6 +58,18 @@ export default class ShoppingListComponent extends Component {
                 <Text>Vacuum</Text>
               </Body>
             </ListItem>
+                        <ListItem onPress={ this.viewItem.bind(this, 'Shoes') }>
+                          <Thumbnail square size={80} source={require('./images/shoes.png')} />
+                          <Body>
+                            <Text>Shoes</Text>
+                          </Body>
+                        </ListItem>
+                                    <ListItem onPress={ this.viewItem.bind(this, 'MacBook') }>
+                                      <Thumbnail square size={80} source={require('./images/macbookpro.png')} />
+                                      <Body>
+                                        <Text>MacBook</Text>
+                                      </Body>
+                                    </ListItem>
           </List>
         </Content>
       </Container>
