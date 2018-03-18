@@ -13,14 +13,14 @@ export default class ItemDetailComponent extends Component {
     placeOrder = async (item) => {
       // item not used for the placing of order
 
-      fetch('http://10.104.11.145:3000/placeOrder', {
+      fetch('http://10.104.10.130:3000/placeOrder', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          lat: 49.154888,
-          long: -123.08190,
+          lat: 49.2634490,
+          long: -123.1382215,
           alt: 100
         })
       })

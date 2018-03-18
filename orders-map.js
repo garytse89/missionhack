@@ -16,6 +16,7 @@ export default class OrdersMapComponent extends Component {
       },
       description: 'Bleh'
     }
+    this.orderId = 0;
   }
 
   getInitialState() {
@@ -47,8 +48,9 @@ export default class OrdersMapComponent extends Component {
     };
   }
 
-  getPackageLocation = async ( orderId ) =>{
-    fetch( 'http://10.104.11.145:3000/packageLocation/' + orderId, {
+  getPackageLocation = async () =>{
+    console.log( 'order id =', this.orderId);
+    fetch( 'http://10.104.10.130:3000/packageLocation/' + this.orderId, {
       method: 'GET',
     })
     .then( response => response.json() )
@@ -67,16 +69,7 @@ export default class OrdersMapComponent extends Component {
     } );
   }
 
-  onRegionChangeComplete(orderId, region) {
-    this.getPackageLocation(orderId);
-    // this.drone = {
-    //   title: 'PackageChanged',
-    //   latlng: {
-    //     latitude: region.latitude,
-    //     longitude: region.longitude
-    //   },
-    //   description: 'Blehh'
-    // }
+  onRegionChangeComplete(region) {
     this.setState({ region });
   }
 
@@ -87,13 +80,15 @@ export default class OrdersMapComponent extends Component {
 
     console.log( 'orders-map opens with params=', params);
 
+    this.orderId = params.orderId;
+
     return (
       <Container>
       <View style={ styles.container }>
       <MapView
       style={styles.map}
       region={this.state.region}
-      onRegionChangeComplete={this.onRegionChangeComplete.bind(this, params.orderId)}>
+      onRegionChangeComplete={this.onRegionChangeComplete.bind(this)}>
       <Marker
         coordinate={this.state.markers[0].latlng}
         title={this.state.markers[0].title}
@@ -104,7 +99,7 @@ export default class OrdersMapComponent extends Component {
         description={this.drone.description}/>
         </MapView>
       </View>
-      <Button onPress={this.getPackageLocation.bind(this, params.orderId)} title='Track Package'/>
+      <Button onPress={this.getPackageLocation.bind(this)} title='Track Package'/>
       </Container>
     );
     }
@@ -113,6 +108,7 @@ export default class OrdersMapComponent extends Component {
     this.interval = setInterval(() => {
       console.log('should get package location')
       this.getPackageLocation()
+      this.setState( this.state );
     }, 1000);
   }
 
