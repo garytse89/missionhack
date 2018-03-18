@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Title, Container, Text, Header, Body, Footer, Content, Left, Center } from 'native-base';
-import { AsyncStorage, Button, Image, View } from 'react-native';
+import { AsyncStorage, Button, Image, View, ToastAndroid } from 'react-native';
+import SERVER_IP from './ip';
 
 export default class ItemDetailComponent extends Component {
   static navigationOptions = {
@@ -15,7 +16,7 @@ export default class ItemDetailComponent extends Component {
       gl.getCurrentPosition( ( { coords } )=>{
         console.log('Success!', coords.latitude, coords.longitude, coords.altitude )
 
-        fetch('http://10.104.11.145:3000/placeOrder', {
+        fetch(`http://${ SERVER_IP }:3000/placeOrder`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -29,26 +30,30 @@ export default class ItemDetailComponent extends Component {
           .then((response) => response.text())
           .then((responseText)=>{
 
-            const orderId = responseText;
-            // store orderId
-            console.log('Storing the order of item=', item.name, 'as orderid=', orderId);
-            return AsyncStorage.setItem(orderId, item.name);
+          const orderId = responseText;
+          // store orderId
+          console.log('Storing the order of item=', item.name, 'as orderid=', orderId);
+          return AsyncStorage.setItem(orderId, JSON.stringify( {
+            orderId,
+            itemName: item.name,
+            lat: coords.latitude,
+            long: coords.longitude,
+            alt: coord.altitude
+          } ) );
+        })
+        .then(() => {
 
-          })
-          .then(() => {
+          console.log('--Finished storing order in local database--');
+          ToastAndroid.show('You have ordered a ' + item.name + ', it should be arriving shortly by flight!',
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50
+          )
+        })
+          .catch(console.log);
 
-            console.log('--Finished storing order in local database--');
-
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-
-      },
-      err=>console.log('error :(', err), { enableHighAccuracy: true } );
-
-
-    }
+    } ) }
 
     let item = params.item;
     if (!item) {

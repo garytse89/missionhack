@@ -3,6 +3,8 @@ import { Container, Text } from 'native-base';
 import { StyleSheet, View, Button } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
+import SERVER_IP from './ip';
+
 export default class OrdersMapComponent extends Component {
 
   constructor() {
@@ -49,7 +51,8 @@ export default class OrdersMapComponent extends Component {
   }
 
   getPackageLocation = async () =>{
-    fetch( 'http://10.104.11.145:3000/packageLocation/' + this.orderId, {
+    console.log( '(orders-map) getting package location for orderId =', this.orderId);
+    fetch(`http://${ SERVER_IP }:3000/packageLocation/${ this.orderId }`, {
       method: 'GET',
     })
     .then( response => response.json() )
@@ -69,7 +72,7 @@ export default class OrdersMapComponent extends Component {
   }
 
   getDronePath = async () =>{
-    fetch( 'http://10.104.11.145:3000/getPaths?lat=49.2634490&long=-123.1382215', {
+    fetch( `http://${ SERVER_IP }:3000/getPaths?lat=49.2634490&long=-123.1382215`, {
       method: 'GET'
     } )
     .then( response => response.json() )
@@ -85,7 +88,9 @@ export default class OrdersMapComponent extends Component {
     const { navigate } = this.props.navigation;
     const { params } = this.props.navigation.state;
 
-    this.orderId = params.orderId;
+    console.log( 'orders-map opens with params=', params);
+
+    this.orderId = params.order.orderId;
 
     return (
       <Container>

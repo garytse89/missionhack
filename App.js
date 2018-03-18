@@ -5,7 +5,7 @@ import OrdersListComponent from './orders-list';
 import requestGeoLocation from './getPermissions';
 
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { AsyncStorage, View } from 'react-native';
 import { Icon, Text } from 'native-base';
 
 
@@ -93,12 +93,13 @@ _loadInitialState = async () => {
 }
 
   render() {
-
     if (!this.state.loaded) {
       return (
         <View><Text>Loading...</Text></View>
       );
     }
+
+    AsyncStorage.clear(); // THE BLANK SLATE
 
     return (
       <Navigation></Navigation>

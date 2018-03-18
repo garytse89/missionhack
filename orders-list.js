@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Body, Button, Left, Right, Card, CardItem, Icon, List, ListItem, Container, Image, Text, Thumbnail } from 'native-base';
-import { AsyncStorage, StyleSheet, View } from 'react-native';
+import { AsyncStorage, ListView, StyleSheet, View } from 'react-native';
 import Items from './Items';
 import MapView, { Marker } from 'react-native-maps';
 
@@ -14,30 +14,28 @@ export default class OrderListComponent extends Component {
     }
 
     componentWillMount() {
-        console.log('componentwillmount')
         this._loadInitialState().done();
+    }
+
+    _setLoaded() {
+        Object.assign( this.state, { loaded: true } );
     }
 
     _loadInitialState = async () => {
         try {
             let keys = await AsyncStorage.getAllKeys();
-            console.log('keys=',keys);
             let orders = await AsyncStorage.multiGet( keys );
-            console.log('orders=', orders);
-            Object.assign( this.state, { orders, loaded: true } );
-
-            console.log('state after load', this.state);
-            
-            this.forceUpdate()
+            Object.assign( this.state, { orders } );
+            this._setLoaded();
+            this.forceUpdate();
         } catch (error) {
             console.error( error );
         }
     };
 
-    goToMap( orderId ) {
-        console.log( 'going to map for order=', orderId);
+    goToMap( order ) {
         const { navigate } = this.props.navigation;
-        navigate('Map', { orderId })
+        navigate('Map', { order });
     }
 
   render() {
@@ -48,37 +46,38 @@ export default class OrderListComponent extends Component {
         );
     }
 
-    const orderCards = [];
+      const orderCards = [];
 
-    for( let i=0; i<this.state.orders.length; i++ ){
+      for (let i = 0; i < this.state.orders.length; i++) {
 
-        const order = this.state.orders[ i ];
-        const [ orderId, itemName ] = order;
+          const [ orderId, orderObjStr ] = this.state.orders[i];
+          const order = JSON.parse(orderObjStr);
+          const { itemName } = order;
 
-        const itemImage = Items.find( ( { name } )=>name === itemName ).image;
+          const itemImage = Items.find(({ name }) => name === itemName).image;
 
-        orderCards.push(
-            <Card>
-                <CardItem>
-                    <Left>
-                        <Thumbnail small source={ itemImage } />
-                    </Left>
-                    <Body>
-                        <Text>{itemName}</Text>
-                        <Text note>Order #{orderId}</Text>
-                    </Body>
-                    <Right>
-                        <Button onPress={this.goToMap.bind(this, orderId)} success><Text>VIEW</Text></Button>
-                    </Right>
-                </CardItem>
-            </Card>
-        );
-    }
+          orderCards.push(
+              <Card key={ orderId }>
+                  <CardItem>
+                      <Left>
+                          <Thumbnail small source={itemImage} />
+                      </Left>
+                      <Body>
+                          <Text>{itemName}</Text>
+                          <Text note>Order #{orderId}</Text>
+                      </Body>
+                      <Right>
+                          <Button onPress={this.goToMap.bind(this, order)} success><Text>VIEW</Text></Button>
+                      </Right>
+                  </CardItem>
+              </Card>
+          );
+      }
 
-    return (
-        <Container>
-            { orderCards }
-        </Container>
+      return (
+          <Container>
+              {orderCards}
+          </Container>
     );
   }
 }
