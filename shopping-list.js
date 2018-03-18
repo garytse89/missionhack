@@ -3,15 +3,15 @@ import { Left, Container, Header, Content, Title, Body, Item, Button, Icon, Inpu
 import { List, ListItem, Thumbnail } from 'native-base';
 
 export default class ShoppingListComponent extends Component {
+
+toggleDrawer() {
+  console.log('button pressed');
+}
+
   render() {
     return (
       <Container>
         <Header searchBar rounded>
-          <Left>
-            <Button transparent>
-              <Icon name='menu' />
-            </Button>
-          </Left>
           <Item>
             <Icon name="ios-search" />
             <Input placeholder="Search" />
