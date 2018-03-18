@@ -3,6 +3,37 @@ import { Left, Container, Header, Content, Title, Body, Item, Button, Icon, Inpu
 import { List, ListItem, Thumbnail } from 'native-base';
 import { StyleSheet, View} from 'react-native';
 
+const Items = [
+  {
+    name: 'Hair Dryer',
+    image: require('./images/HairDryer.png')
+  },
+  {
+    name: 'Headphones',
+    image: require('./images/Headphones.png')
+  },
+  {
+    name: 'Phone',
+    image: require('./images/Phone.png')
+  },
+  {
+    name: 'Router',
+    image: require('./images/Router.png')
+  },
+  {
+    name: 'Vacuum',
+    image: require('./images/Vacuum.png')
+  },
+  {
+    name: 'Shoes',
+    image: require('./images/shoes.png')
+  },
+  {
+    name: 'MacBook Pro',
+    image: require('./images/macbookpro.png')
+  }
+];
+
 export default class ShoppingListComponent extends Component {
 
   viewItem( itemName ) {
@@ -27,49 +58,13 @@ export default class ShoppingListComponent extends Component {
           </Button>
         </Header>
         <Content>
-          <List>
-            <ListItem onPress={ this.viewItem.bind(this, 'HairDryer')}>
-              <Thumbnail square size={80} source={ require('./images/HairDryer.png') } />
-              <Body>
-                <Text>Hair Dryer</Text>
-              </Body>
-            </ListItem>
-            <ListItem onPress={ this.viewItem.bind(this, 'Headphones') }>
-              <Thumbnail square size={80} source={require('./images/Headphones.png')} />
-              <Body>
-                <Text>Headphones</Text>
-              </Body>
-            </ListItem>
-            <ListItem onPress={ this.viewItem.bind(this, 'Phone') }>
-              <Thumbnail square size={80} source={require('./images/Phone.png')} />
-              <Body>
-                <Text>Phone</Text>
-              </Body>
-            </ListItem>
-            <ListItem onPress={ this.viewItem.bind(this, 'Router') }>
-              <Thumbnail square size={80} source={require('./images/Router.png')} />
-              <Body>
-                <Text>Router</Text>
-              </Body>
-            </ListItem>
-            <ListItem onPress={ this.viewItem.bind(this, 'Vacuum') }>
-              <Thumbnail square size={80} source={require('./images/Vacuum.png')} />
-              <Body>
-                <Text>Vacuum</Text>
-              </Body>
-            </ListItem>
-                            <ListItem onPress={ this.viewItem.bind(this, 'Shoes') }>
-                              <Thumbnail square size={80} source={require('./images/shoes.png')} />
-                              <Body>
-                                <Text>Shoes</Text>
-                              </Body>
-                            </ListItem>
-                                        <ListItem onPress={ this.viewItem.bind(this, 'MacBook') }>
-                                          <Thumbnail square size={80} source={require('./images/macbookpro.png')} />
-                                          <Body>
-                                            <Text>MacBook</Text>
-                                          </Body>
-                                        </ListItem>
+          <List dataArray={Items}
+            renderRow={(item) =>
+              <ListItem onPress={this.viewItem.bind(this, item)}>
+                <Thumbnail square source={item.image} />
+                <Text>{item.name}</Text>
+              </ListItem>
+            }>
           </List>
         </Content>
       </Container>
