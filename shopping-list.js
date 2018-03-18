@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Left, Container, Header, Content, Title, Body, Item, Button, Icon, Input, Text } from 'native-base';
 import { List, ListItem, Thumbnail } from 'native-base';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View} from 'react-native';
 
 const Items = [
   {
@@ -13,16 +13,24 @@ const Items = [
     image: require('./images/Headphones.png')
   },
   {
-    name: 'Headphones',
-    image: require('./images/Headphones.png')
+    name: 'Phone',
+    image: require('./images/Phone.png')
   },
   {
-    name: 'Headphones',
-    image: require('./images/Headphones.png')
+    name: 'Router',
+    image: require('./images/Router.png')
   },
   {
-    name: 'Headphones',
-    image: require('./images/Headphones.png')
+    name: 'Vacuum',
+    image: require('./images/Vacuum.png')
+  },
+  {
+    name: 'Shoes',
+    image: require('./images/shoes.png')
+  },
+  {
+    name: 'MacBook Pro',
+    image: require('./images/macbookpro.png')
   }
 ];
 
@@ -37,8 +45,8 @@ export default class ShoppingListComponent extends Component {
   render() {
     return (
       <Container>
-      <Header><View><Text style={styles.titleText}>We deliver right to you</Text>
-      <Text style={styles.baseText}>Search our extensive inventory below</Text></View></Header>
+      <Header><View><Text style={styles.titleText}>Our drones deliver right to you</Text>
+      <Text style={styles.baseText}>Anywhere, any time, any floor</Text></View></Header>
         <Header searchBar rounded>
           <Item>
             <Icon name="ios-search" />
