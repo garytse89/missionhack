@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Title, Container, Text, Header, Body, Footer, Content, Left, Center } from 'native-base';
-import { Button, Image, View } from 'react-native';
+import { AsyncStorage, Button, Image, View } from 'react-native';
 
 export default class ItemDetailComponent extends Component {
   static navigationOptions = {
@@ -24,12 +24,15 @@ export default class ItemDetailComponent extends Component {
           alt: 100
         })
       })
-        .then((response) => {
+        .then((response) => response.text())
+        .then((responseText)=>{
 
-          const orderId = response;
+          console.log('RESPONSE.TEXT', responseText );
+
+          const orderId = responseText;
           // store orderId 
-          console.log('Storing order of item=', item, 'as orderid=', orderId);
-          return AsyncStorage.setItem(orderId, item);
+          console.log('Storing the order of item=', item.name, 'as orderid=', orderId);
+          return AsyncStorage.setItem(orderId, item.name);
 
         })
         .then(() => {
@@ -50,31 +53,54 @@ export default class ItemDetailComponent extends Component {
     }
 
     return (
-      <Container>
+      <Container style={{ padding: 10, backgroundColor: '#fff' }}>
         <View>
           <Text>{' '}</Text>
-          <Text>{params ? item.name : 'Item Not Found'}</Text>
+          <Text style={{ fontSize: 20 }}>{params ? item.name : 'Item Not Found'}</Text>
           <Text>{' '}</Text>
-
-          <Image
-            style={{ flex: 1, height: undefined, width: undefined }}
-            source={{ uri: item.url }}
-            resizeMode="contain" />
-
-          <Text>{' '}</Text>
-          <Text>{' '}</Text>
-          <Text>{' '}</Text>
-          <Text>{' '}</Text>
-
-          <Text>Note: Not eligible for Optimus Prime. Offers with free Prime shipping available from other sellers.</Text>
-          <Text>In Stock.</Text>
-          <Text>Get it as soon as April 10 - May 1 when you choose Standard Shipping at checkout.</Text>
-          <Text>Ships from and sold by Nomads.</Text>
-          <Text>{' '}</Text>
-          <Text>Deliver to Arthur Lee - Vancouver V8C 5D9</Text>
         </View>
 
-        <Button onPress={placeOrder.bind(null, item)} title="Ship To Me" color="#f0c14b" style={{ height: '100px' }} />
+        <View style={{ alignItems: 'center', marginBottom: -20 }}>
+          <Image
+            source={item.image}
+            resizeMode="contain" />
+        </View>
+        <View>
+
+          <Text>{' '}</Text>
+          <Text>{' '}</Text>
+          <Text>{' '}</Text>
+          <Text>{' '}</Text>
+
+          <View style={{
+            paddingBottom: 5 }}>
+            <Text>
+              <Text style={{ fontWeight: 'bold' }}>Note:</Text> Not eligible for Optimus Prime. Offers with free Prime shipping available from other sellers.
+            </Text>
+          </View>
+          
+          <View style={{
+            paddingBottom: 5
+          }}>
+            <Text style={{ fontSize: 18, color: 'green' }}>In Stock.</Text>
+          </View>
+          
+          <View style={{
+            paddingBottom: 5
+          }}>
+            <Text>
+              <Text style={{ fontWeight: 'bold' }}>Get it as soon as April 10 - May 1</Text> when you choose Standard Shipping at checkout.
+            </Text>
+          </View>
+
+          <Text>Ships from and sold by <Text style={{ color: 'blue' }}>Nomads</Text>.</Text>
+          <Text>{' '}</Text>
+          <Text style={{ color: 'blue' }}>Deliver to Arthur Lee - Vancouver V8C 5D9</Text>
+        </View>
+        
+        <View style={{ padding: 10 }}>
+          <Button onPress={placeOrder.bind(null, item)} title="Ship To Me" color="#f0c14b" style={{ height: '100px' }} />
+        </View>
       </Container>
     );
   }

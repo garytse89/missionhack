@@ -36,15 +36,16 @@ const Items = [
 
 export default class ShoppingListComponent extends Component {
 
-  viewItem( itemName ) {
+  viewItem( item ) {
     const { navigate } = this.props.navigation;
-    console.log( 'sending', itemName );
-    navigate( 'Item', { itemName: itemName } )
+    navigate( 'Item', { item } )
   }
 
   render() {
     return (
-      <Container>
+      <Container style={{
+        backgroundColor: '#fff'
+      }}>
       <Header><View><Text style={styles.titleText}>Our drones deliver right to you</Text>
       <Text style={styles.baseText}>Anywhere, any time, any floor</Text></View></Header>
         <Header searchBar rounded>
@@ -62,7 +63,7 @@ export default class ShoppingListComponent extends Component {
             renderRow={(item) =>
               <ListItem onPress={this.viewItem.bind(this, item)}>
                 <Thumbnail square source={item.image} />
-                <Text>{item.name}</Text>
+                <Text>{'    ' + item.name}</Text>
               </ListItem>
             }>
           </List>
