@@ -34,6 +34,12 @@ export default class OrderListComponent extends Component {
         }
     };
 
+    goToMap( orderId ) {
+        console.log( 'going to map for order=', orderId);
+        // const { navigate } = this.props.navigation;
+        // navigate('Map', { orderId })
+    }
+
   render() {
 
     if (!this.state.loaded) {
@@ -62,7 +68,7 @@ export default class OrderListComponent extends Component {
                         <Text note>Order #{orderId}</Text>
                     </Body>
                     <Right>
-                        <Icon style={{ color: '#000' }} name="ios-arrow-forward-outline" />
+                        <Button onPress={this.goToMap.bind(this, orderId)} success><Text>VIEW</Text></Button>
                     </Right>
                 </CardItem>
             </Card>
