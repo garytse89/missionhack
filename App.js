@@ -4,7 +4,7 @@ import OrdersMapComponent from './orders-map';
 import OrdersListComponent from './orders-list';
 
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { AsyncStorage, View } from 'react-native';
 import { Icon } from 'native-base';
 
 import {
@@ -69,6 +69,8 @@ const Navigation = DrawerNavigator({
 
 class App extends Component {
   render() {
+    AsyncStorage.clear(); // THE BLANK SLATE
+
     return (
       <Navigation></Navigation>
     );

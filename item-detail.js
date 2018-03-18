@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Title, Container, Text, Header, Body, Footer, Content, Left, Center } from 'native-base';
-import { AsyncStorage, Button, Image, View } from 'react-native';
+import { AsyncStorage, Button, Image, View, ToastAndroid } from 'react-native';
+import SERVER_IP from './ip';
 
 export default class ItemDetailComponent extends Component {
   static navigationOptions = {
@@ -13,7 +14,7 @@ export default class ItemDetailComponent extends Component {
     placeOrder = async (item) => {
       // item not used for the placing of order
 
-      fetch('http://10.104.10.130:3000/placeOrder', {
+      fetch(`http://${ SERVER_IP }:3000/placeOrder`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -36,6 +37,12 @@ export default class ItemDetailComponent extends Component {
         .then(() => {
 
           console.log('--Finished storing order in local database--');
+          ToastAndroid.show('You have ordered a ' + item.name + ', it should be arriving shortly by flight!', 
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50
+          );
 
         })
         .catch((error) => {

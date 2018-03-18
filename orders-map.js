@@ -3,6 +3,8 @@ import { Container, Text } from 'native-base';
 import { StyleSheet, View, Button } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
+import SERVER_IP from './ip';
+
 export default class OrdersMapComponent extends Component {
 
   constructor() {
@@ -50,7 +52,7 @@ export default class OrdersMapComponent extends Component {
 
   getPackageLocation = async () =>{
     console.log( 'order id =', this.orderId);
-    fetch( 'http://10.104.10.130:3000/packageLocation/' + this.orderId, {
+    fetch(`http://${ SERVER_IP }:3000/packageLocation/${ this.orderId }`, {
       method: 'GET',
     })
     .then( response => response.json() )
