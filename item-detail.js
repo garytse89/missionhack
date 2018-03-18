@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Title, Container, Text, Header, Body, Footer, Content, Left, Center } from 'native-base';
-import { Button, Image, View } from 'react-native';
+import { AsyncStorage, Button, Image, View, ToastAndroid } from 'react-native';
+import SERVER_IP from './ip';
 
 export default class ItemDetailComponent extends Component {
   static navigationOptions = {
@@ -9,38 +10,49 @@ export default class ItemDetailComponent extends Component {
   render() {
     const { navigate } = this.props.navigation;
     const { params } = this.props.navigation.state;
+    const gl = navigator.geolocation;
 
     placeOrder = async (item) => {
-      // item not used for the placing of order
+      gl.getCurrentPosition( ( { coords } )=>{
+        console.log('Success!', coords.latitude, coords.longitude, coords.altitude )
 
-      fetch('http://10.104.11.145:3000/placeOrder', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          lat: 123,
-          long: 123,
-          alt: 100
+        fetch(`http://${ SERVER_IP }:3000/placeOrder`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            lat: coords.latitude,
+            long: coords.longitude,
+            alt: coords.altitude
+          })
         })
-      })
-        .then((response) => {
-
-          const orderId = response;
-          // store orderId 
-          console.log('Storing order of item=', item, 'as orderid=', orderId);
-          return AsyncStorage.setItem(orderId, item);
-
+          .then((response) => response.json())
+          .then((responseText)=>{
+          const orderId = responseText.toString();
+          // store orderId
+          console.log('Storing the order of item=', item.name, 'as orderid=', orderId);
+          return AsyncStorage.setItem(orderId, JSON.stringify( {
+            orderId,
+            itemName: item.name,
+            lat: coords.latitude,
+            long: coords.longitude,
+            alt: coords.altitude
+          } ) );
         })
         .then(() => {
 
           console.log('--Finished storing order in local database--');
-
+          ToastAndroid.show('You have ordered a ' + item.name + ', it should be arriving shortly by flight!',
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            50
+          )
         })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+          .catch(console.log);
+
+    } ) }
 
     let item = params.item;
     if (!item) {
@@ -50,31 +62,54 @@ export default class ItemDetailComponent extends Component {
     }
 
     return (
-      <Container>
+      <Container style={{ padding: 10, backgroundColor: '#fff' }}>
         <View>
           <Text>{' '}</Text>
-          <Text>{params ? item.name : 'Item Not Found'}</Text>
+          <Text style={{ fontSize: 20 }}>{params ? item.name : 'Item Not Found'}</Text>
           <Text>{' '}</Text>
-
-          <Image
-            style={{ flex: 1, height: undefined, width: undefined }}
-            source={{ uri: item.url }}
-            resizeMode="contain" />
-
-          <Text>{' '}</Text>
-          <Text>{' '}</Text>
-          <Text>{' '}</Text>
-          <Text>{' '}</Text>
-
-          <Text>Note: Not eligible for Optimus Prime. Offers with free Prime shipping available from other sellers.</Text>
-          <Text>In Stock.</Text>
-          <Text>Get it as soon as April 10 - May 1 when you choose Standard Shipping at checkout.</Text>
-          <Text>Ships from and sold by Nomads.</Text>
-          <Text>{' '}</Text>
-          <Text>Deliver to Arthur Lee - Vancouver V8C 5D9</Text>
         </View>
 
-        <Button onPress={placeOrder.bind(null, item)} title="Ship To Me" color="#f0c14b" style={{ height: '100px' }} />
+        <View style={{ alignItems: 'center', marginBottom: -20 }}>
+          <Image
+            source={item.image}
+            resizeMode="contain" />
+        </View>
+        <View>
+
+          <Text>{' '}</Text>
+          <Text>{' '}</Text>
+          <Text>{' '}</Text>
+          <Text>{' '}</Text>
+
+          <View style={{
+            paddingBottom: 5 }}>
+            <Text>
+              <Text style={{ fontWeight: 'bold' }}>Note:</Text> Not eligible for Optimus Prime. Offers with free Prime shipping available from other sellers.
+            </Text>
+          </View>
+
+          <View style={{
+            paddingBottom: 5
+          }}>
+            <Text style={{ fontSize: 18, color: 'green' }}>In Stock.</Text>
+          </View>
+
+          <View style={{
+            paddingBottom: 5
+          }}>
+            <Text>
+              <Text style={{ fontWeight: 'bold' }}>Get it as soon as April 10 - May 1</Text> when you choose Standard Shipping at checkout.
+            </Text>
+          </View>
+
+          <Text>Ships from and sold by <Text style={{ color: 'blue' }}>Nomads</Text>.</Text>
+          <Text>{' '}</Text>
+          <Text style={{ color: 'blue' }}>Deliver to Arthur Lee - Vancouver V8C 5D9</Text>
+        </View>
+
+        <View style={{ padding: 10 }}>
+          <Button onPress={placeOrder.bind(null, item)} title="Ship To Me" color="#f0c14b" style={{ height: '100px' }} />
+        </View>
       </Container>
     );
   }

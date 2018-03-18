@@ -1,10 +1,13 @@
 import ShoppingListComponent from './shopping-list';
 import ItemDetailComponent from './item-detail';
-import MyOrdersComponent from './my-orders';
+import OrdersMapComponent from './orders-map';
+import OrdersListComponent from './orders-list';
+import requestGeoLocation from './getPermissions';
 
 import React, { Component } from 'react';
-import { View } from 'react-native';
-import { Icon } from 'native-base';
+import { AsyncStorage, View } from 'react-native';
+import { Icon, Text } from 'native-base';
+
 
 import {
   DrawerNavigator, navigationOptions, StackNavigator
@@ -28,11 +31,18 @@ const Stacc = StackNavigator({
 });
 
 const OrderStack = StackNavigator({
-  Order: {
-    screen: MyOrdersComponent,
+  List: {
+    screen: OrdersListComponent,
     navigationOptions: ({ navigation }) =>({
       title: 'My Orders',
       headerLeft: <Icon name="menu" size={35} onPress={ () => navigation.navigate('DrawerOpen') } />
+    })
+  },
+  Map: {
+    screen: OrdersMapComponent,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Tracking',
+      headerLeft: <Icon name="menu" size={35} onPress={() => navigation.navigate('DrawerOpen')} />
     })
   }
 });
@@ -60,7 +70,37 @@ const Navigation = DrawerNavigator({
 
 
 class App extends Component {
+
+constructor() {
+  super();
+  this.state = {
+    loaded: false,
+  };
+}
+
+componentWillMount() {
+  this._loadInitialState().done();
+}
+
+_loadInitialState = async () => {
+  try {
+    await requestGeoLocation();
+    this.setState( { loaded: true } );
+    this.forceUpdate();
+  } catch( err ) {
+  console.error( err );
+  }
+}
+
   render() {
+    if (!this.state.loaded) {
+      return (
+        <View><Text>Loading...</Text></View>
+      );
+    }
+
+    AsyncStorage.clear(); // THE BLANK SLATE
+
     return (
       <Navigation></Navigation>
     );
