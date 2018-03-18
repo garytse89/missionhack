@@ -51,7 +51,7 @@ export default class OrdersMapComponent extends Component {
   }
 
   getPackageLocation = async () =>{
-    console.log( 'order id =', this.orderId);
+    console.log( '(orders-map) getting package location for orderId =', this.orderId);
     fetch(`http://${ SERVER_IP }:3000/packageLocation/${ this.orderId }`, {
       method: 'GET',
     })
@@ -82,7 +82,7 @@ export default class OrdersMapComponent extends Component {
 
     console.log( 'orders-map opens with params=', params);
 
-    this.orderId = params.orderId;
+    this.orderId = params.order.orderId;
 
     return (
       <Container>

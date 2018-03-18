@@ -3,6 +3,10 @@ import { Title, Container, Text, Header, Body, Footer, Content, Left, Center } f
 import { AsyncStorage, Button, Image, View, ToastAndroid } from 'react-native';
 import SERVER_IP from './ip';
 
+const LAT = 49.2634490;
+const LONG = -123.1382215;
+const ALTITUDE = 10;
+
 export default class ItemDetailComponent extends Component {
   static navigationOptions = {
     title: 'Welcome',
@@ -20,9 +24,9 @@ export default class ItemDetailComponent extends Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          lat: 49.2634490,
-          long: -123.1382215,
-          alt: 100
+          lat: LAT,
+          long: LONG,
+          alt: ALTITUDE
         })
       })
         .then((response) => response.text())
@@ -31,8 +35,13 @@ export default class ItemDetailComponent extends Component {
           const orderId = responseText;
           // store orderId
           console.log('Storing the order of item=', item.name, 'as orderid=', orderId);
-          return AsyncStorage.setItem(orderId, item.name);
-
+          return AsyncStorage.setItem(orderId, JSON.stringify( {
+            orderId,
+            itemName: item.name,
+            lat: LAT,
+            long: LONG,
+            alt: ALTITUDE
+          } ) );
         })
         .then(() => {
 

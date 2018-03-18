@@ -17,21 +17,25 @@ export default class OrderListComponent extends Component {
         this._loadInitialState().done();
     }
 
+    _setLoaded() {
+        Object.assign( this.state, { loaded: true } );
+    }
+
     _loadInitialState = async () => {
         try {
             let keys = await AsyncStorage.getAllKeys();
             let orders = await AsyncStorage.multiGet( keys );
-            Object.assign( this.state, { orders, loaded: true } );
-
-            this.forceUpdate()
+            Object.assign( this.state, { orders } );
+            this._setLoaded();
+            this.forceUpdate();
         } catch (error) {
             console.error( error );
         }
     };
 
-    goToMap( orderId ) {
+    goToMap( order ) {
         const { navigate } = this.props.navigation;
-        navigate('Map', { orderId })
+        navigate('Map', { order });
     }
 
   render() {
@@ -46,13 +50,14 @@ export default class OrderListComponent extends Component {
 
       for (let i = 0; i < this.state.orders.length; i++) {
 
-          const order = this.state.orders[i];
-          const [orderId, itemName] = order;
+          const [ orderId, orderObjStr ] = this.state.orders[i];
+          const order = JSON.parse(orderObjStr);
+          const { itemName } = order;
 
           const itemImage = Items.find(({ name }) => name === itemName).image;
 
           orderCards.push(
-              <Card>
+              <Card key={ orderId }>
                   <CardItem>
                       <Left>
                           <Thumbnail small source={itemImage} />
@@ -62,7 +67,7 @@ export default class OrderListComponent extends Component {
                           <Text note>Order #{orderId}</Text>
                       </Body>
                       <Right>
-                          <Button onPress={this.goToMap.bind(this, orderId)} success><Text>VIEW</Text></Button>
+                          <Button onPress={this.goToMap.bind(this, order)} success><Text>VIEW</Text></Button>
                       </Right>
                   </CardItem>
               </Card>
