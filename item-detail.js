@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'native-base';
 
-export default class ItemView extends Component {
+export default class ItemDetailComponent extends Component {
   static navigationOptions = {
     title: 'Welcome',
   };
