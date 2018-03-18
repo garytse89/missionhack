@@ -8,6 +8,9 @@ export default class ItemDetailComponent extends Component {
   };
   render() {
     const { navigate } = this.props.navigation;
+    const { params } = this.props.navigation.state;
+
+    console.log( params );
 
     placeOrder = async () =>{
       fetch( 'http://10.104.11.145:3000/placeOrder', {
@@ -31,8 +34,7 @@ export default class ItemDetailComponent extends Component {
 
     return (
       <Container>
-        <Text>Doge Title</Text>
-        <Image source={require('./images/doge.jpg')} style={{ height: 200, width: 200 }} />
+        <Text>{ params ? params.itemName : 'Item Not Found' }</Text>
         <View
           style={{
             borderBottomColor: 'black',
@@ -40,7 +42,6 @@ export default class ItemDetailComponent extends Component {
             width: '80%'
           }}
         />  
-        <Text>Doge Babies</Text>
         <Button onPress={placeOrder} title="Ship To Me" color="#f0c14b"/>
       </Container>
     );

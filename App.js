@@ -10,22 +10,19 @@ import {
   DrawerNavigator, navigationOptions, StackNavigator
 } from 'react-navigation';
 
-const ItemStack = StackNavigator({
-  Item: {
-    screen: ItemDetailComponent,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Items',  // Title to appear in status bar
-      headerLeft: <Icon name="menu" size={35} onPress={ () => navigation.navigate('DrawerOpen') } />
-    })
-  }
-});
-
-const HomeStack = StackNavigator({
+const Stacc = StackNavigator({
   Home: {
     screen: ShoppingListComponent,
     navigationOptions: ({ navigation }) => ({
       title: 'Home',  // Title to appear in status bar
-      headerLeft: <Icon name="menu" size={35} onPress={ () => navigation.navigate('DrawerOpen') } />
+      headerLeft: <Icon name="menu" size={35} onPress={() => navigation.navigate('DrawerOpen')} />
+    })
+  },
+  Item: {
+    screen: ItemDetailComponent,
+    navigationOptions: ({ navigation }) => ({
+      title: 'View Item',  // Title to appear in status bar
+      headerLeft: <Icon name="menu" size={35} onPress={() => navigation.navigate('DrawerOpen')} />
     })
   }
 });
@@ -42,17 +39,17 @@ const OrderStack = StackNavigator({
 
 const Navigation = DrawerNavigator({
   Home: {
-    screen: HomeStack,
+    screen: Stacc,
     navigationOptions: {
       title: 'Home' // Text shown in left menu
     }
   },
-  Item: {
-    screen: ItemStack,
-    navigationOptions: {
-      title: 'Items'  // Text shown in left menu
-    }
-  },
+  // Item: {
+  //   screen: ItemStack,
+  //   navigationOptions: {
+  //     title: 'Items'  // Text shown in left menu
+  //   }
+  // },
   Order: {
     screen: OrderStack,
     navigationOptions: {

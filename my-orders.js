@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Text } from 'native-base';
 import { Button, Image, View } from 'react-native';
-import MapView from 'react-native-maps';
+// import MapView from 'react-native-maps';
 
 export default class ItemDetailComponent extends Component {
   static navigationOptions = {

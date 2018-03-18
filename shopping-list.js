@@ -4,9 +4,11 @@ import { List, ListItem, Thumbnail } from 'native-base';
 
 export default class ShoppingListComponent extends Component {
 
-toggleDrawer() {
-  console.log('button pressed');
-}
+  viewItem( itemName ) {
+    const { navigate } = this.props.navigation;
+    console.log( 'sending', itemName );
+    navigate( 'Item', { itemName: itemName } )
+  }
 
   render() {
     return (
@@ -23,39 +25,34 @@ toggleDrawer() {
         </Header>
         <Content>
           <List>
-            <ListItem>
-              <Thumbnail square size={80} source={{ uri: 'https://www.weshareapps.com/wp-content/uploads/2017/06/unnamed-4-52.png' }} />
+            <ListItem onPress={ this.viewItem.bind(this, 'HairDryer') }>
+              <Thumbnail square size={80} source={ require('./images/HairDryer.png') } />
               <Body>
-                <Text>Anna</Text>
-                <Text note>Just Nomad Things.</Text>
+                <Text>Hair Dryer</Text>
               </Body>
             </ListItem>
-            <ListItem>
-              <Thumbnail square size={80} source={{ uri: 'Image URL' }} />
+            <ListItem onPress={ this.viewItem.bind(this, 'Headphones') }>
+              <Thumbnail square size={80} source={require('./images/Headphones.png')} />
               <Body>
-                <Text>Shri</Text>
-                <Text note></Text>
+                <Text>Headphones</Text>
               </Body>
             </ListItem>
-            <ListItem>
-              <Thumbnail square size={80} source={{ uri: 'Image URL' }} />
+            <ListItem onPress={ this.viewItem.bind(this, 'Phone') }>
+              <Thumbnail square size={80} source={require('./images/Phone.png')} />
               <Body>
-                <Text>Gary</Text>
-                <Text note>Its time to build a difference . .</Text>
+                <Text>Phone</Text>
               </Body>
             </ListItem>
-            <ListItem>
-              <Thumbnail square size={80} source={{ uri: 'Image URL' }} />
+            <ListItem onPress={ this.viewItem.bind(this, 'Router') }>
+              <Thumbnail square size={80} source={require('./images/Router.png')} />
               <Body>
-                <Text>Will</Text>
-                <Text note>Its time to build a difference . .</Text>
+                <Text>Router</Text>
               </Body>
             </ListItem>
-            <ListItem>
-              <Thumbnail square size={80} source={{ uri: 'Image URL' }} />
+            <ListItem onPress={ this.viewItem.bind(this, 'Vacuum') }>
+              <Thumbnail square size={80} source={require('./images/Vacuum.png')} />
               <Body>
-                <Text>Gary</Text>
-                <Text note>Its time to build a difference . .</Text>
+                <Text>Vacuum</Text>
               </Body>
             </ListItem>
           </List>
