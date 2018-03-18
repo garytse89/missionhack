@@ -24,13 +24,12 @@ export default class ItemDetailComponent extends Component {
           body: JSON.stringify({
             lat: coords.latitude,
             long: coords.longitude,
-            alt: coord.altitude
+            alt: coords.altitude
           })
         })
-          .then((response) => response.text())
+          .then((response) => response.json())
           .then((responseText)=>{
-
-          const orderId = responseText;
+          const orderId = responseText.toString();
           // store orderId
           console.log('Storing the order of item=', item.name, 'as orderid=', orderId);
           return AsyncStorage.setItem(orderId, JSON.stringify( {
@@ -38,7 +37,7 @@ export default class ItemDetailComponent extends Component {
             itemName: item.name,
             lat: coords.latitude,
             long: coords.longitude,
-            alt: coord.altitude
+            alt: coords.altitude
           } ) );
         })
         .then(() => {

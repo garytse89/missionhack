@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Container, Text } from 'native-base';
 import { StyleSheet, View, Button } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 
 import SERVER_IP from './ip';
+
+var droneImage = require('./images/drone.png')
 
 export default class OrdersMapComponent extends Component {
 
@@ -18,7 +20,11 @@ export default class OrdersMapComponent extends Component {
       },
       description: 'Bleh'
     }
-    this.orderId = 0;
+    this.orderId;
+    this.orderLat;
+    this.orderLon;
+    this.stationPath = [];
+    this.consumerPath = [];
   }
 
   getInitialState() {
@@ -58,7 +64,7 @@ export default class OrdersMapComponent extends Component {
     .then( response => response.json() )
     .then( ( { status, lat: latitude, long: longitude, availability } )=>{
       if (status == "arrived") console.log(status);
-      else {console.log( availability );
+      else { // console.log( availability );
       this.drone = {
         title: 'Package',
         description: 'Your package location',
@@ -72,11 +78,23 @@ export default class OrdersMapComponent extends Component {
   }
 
   getDronePath = async () =>{
-    fetch( `http://${ SERVER_IP }:3000/getPaths?lat=49.2634490&long=-123.1382215`, {
+
+    console.log( 'order lat =', this.orderLat )
+    console.log( 'order lon =', this.orderLon )
+
+    fetch( `http://${ SERVER_IP }:3000/getPaths?lat=${ this.orderLat }&long=${ this.orderLon }`, {
       method: 'GET'
     } )
     .then( response => response.json() )
-    .then( response=> console.log( response ) );
+    .then( response=> {
+    this.stationPath
+      = response.stationToWarehousePath
+        .map( ( { lat: latitude, long: longitude } )=>( { latitude, longitude } ) );
+    this.consumerPath
+      = response.warehouseToConsumerPath
+        .map( ( { lat, long } )=>( { latitude: parseFloat( lat ), longitude: parseFloat( long ) } ) );
+    console.log(this.consumerPath);
+  } );
   }
 
   onRegionChangeComplete(region) {
@@ -88,9 +106,9 @@ export default class OrdersMapComponent extends Component {
     const { navigate } = this.props.navigation;
     const { params } = this.props.navigation.state;
 
-    console.log( 'orders-map opens with params=', params);
-
     this.orderId = params.order.orderId;
+    this.orderLat = params.order.lat;
+    this.orderLon = params.order.long;
 
     return (
       <Container>
@@ -106,7 +124,19 @@ export default class OrdersMapComponent extends Component {
       <Marker
         coordinate={this.drone.latlng}
         title={this.drone.title}
-        description={this.drone.description}/>
+        description={this.drone.description}
+        image={droneImage}
+        centerOffset={{x:5, y:5}}/>
+      <Polyline
+       coordinates={this.stationPath}
+       strokeWidth={2}
+       strokeColor="#283be2"
+      />
+      <Polyline
+       coordinates={this.consumerPath}
+       strokeWidth={2}
+       strokeColor="#283be2"
+      />
         </MapView>
       </View>
       <Button onPress={this.getDronePath.bind(this)} title='Track Package'/>
