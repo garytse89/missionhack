@@ -47,7 +47,28 @@ export default class MyOrdersComponent extends Component {
   };
 }
 
+getPackageLocation = async () =>{
+  fetch( 'http://10.104.11.145:3000/packageLocation/1', {
+    method: 'GET',
+  })
+  .then( response => response.json() )
+  .then( ( { status, lat: latitude, long: longitude, availability } )=>{
+    if (status == "arrived") console.log(status);
+    else {console.log( availability );
+    this.drone = {
+      title: 'Package',
+      description: 'Your package location',
+      latlng: {
+        latitude,
+        longitude
+      }
+    };
+  }
+  } );
+}
+
 onRegionChangeComplete(region) {
+  this.getPackageLocation();
   // this.drone = {
   //   title: 'PackageChanged',
   //   latlng: {
@@ -60,28 +81,6 @@ onRegionChangeComplete(region) {
 }
 
 render() {
-
-  getPackageLocation = async () =>{
-    fetch( 'http://10.104.11.145:3000/packageLocation/0', {
-      method: 'GET',
-    })
-    .then( response => response.text() )
-    .then( JSON.parse )
-    .then( response=>{
-      if (response == "PACKAGE ARRIVED") return console.log(response);
-      console.log('response =', response);
-      console.log('response.lat =', response.lat);
-      console.log('response.long =', response.long);
-      this.drone = {
-        title: 'Package',
-        description: 'Your package location',
-        latlng: {
-          latitude: response.lat,
-          longitude: response.long
-        }
-      };
-    } );
-  }
 
   return (
     <Container>
@@ -100,10 +99,21 @@ render() {
       description={this.drone.description}/>
       </MapView>
     </View>
-    <Button onPress={getPackageLocation} title="Test Get Location"/>
+    <Button onPress={this.getPackageLocation} title='Track Package'/>
     </Container>
   );
+  }
+
+componentDidMount() {
+this.interval = setInterval(() => {
+  console.log('should get package location')
+  this.getPackageLocation()
+}, 1000);
 }
+componentWillUnmount() {
+clearInterval(this.interval);
+}
+
 }
 
 const styles = StyleSheet.create({

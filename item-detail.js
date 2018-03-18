@@ -19,8 +19,8 @@ export default class ItemDetailComponent extends Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          lat: 123,
-          long: 123,
+          lat: 49.154888,
+          long: -123.08190,
           alt: 100
         })
       })
@@ -28,7 +28,7 @@ export default class ItemDetailComponent extends Component {
         .then((responseText)=>{
 
           const orderId = responseText;
-          // store orderId 
+          // store orderId
           console.log('Storing the order of item=', item.name, 'as orderid=', orderId);
           return AsyncStorage.setItem(orderId, item.name);
 
@@ -76,13 +76,13 @@ export default class ItemDetailComponent extends Component {
               <Text style={{ fontWeight: 'bold' }}>Note:</Text> Not eligible for Optimus Prime. Offers with free Prime shipping available from other sellers.
             </Text>
           </View>
-          
+
           <View style={{
             paddingBottom: 5
           }}>
             <Text style={{ fontSize: 18, color: 'green' }}>In Stock.</Text>
           </View>
-          
+
           <View style={{
             paddingBottom: 5
           }}>
@@ -95,7 +95,7 @@ export default class ItemDetailComponent extends Component {
           <Text>{' '}</Text>
           <Text style={{ color: 'blue' }}>Deliver to Arthur Lee - Vancouver V8C 5D9</Text>
         </View>
-        
+
         <View style={{ padding: 10 }}>
           <Button onPress={placeOrder.bind(null, item)} title="Ship To Me" color="#f0c14b" style={{ height: '100px' }} />
         </View>
