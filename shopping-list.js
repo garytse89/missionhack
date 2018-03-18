@@ -3,36 +3,7 @@ import { Left, Container, Header, Content, Title, Body, Item, Button, Icon, Inpu
 import { List, ListItem, Thumbnail } from 'native-base';
 import { StyleSheet, View} from 'react-native';
 
-const Items = [
-  {
-    name: 'Hair Dryer',
-    image: require('./images/HairDryer.png')
-  },
-  {
-    name: 'Headphones',
-    image: require('./images/Headphones.png')
-  },
-  {
-    name: 'Phone',
-    image: require('./images/Phone.png')
-  },
-  {
-    name: 'Router',
-    image: require('./images/Router.png')
-  },
-  {
-    name: 'Vacuum',
-    image: require('./images/Vacuum.png')
-  },
-  {
-    name: 'Shoes',
-    image: require('./images/shoes.png')
-  },
-  {
-    name: 'MacBook Pro',
-    image: require('./images/macbookpro.png')
-  }
-];
+import Items from './Items';
 
 export default class ShoppingListComponent extends Component {
 
