@@ -27,8 +27,6 @@ export default class ItemDetailComponent extends Component {
         .then((response) => response.text())
         .then((responseText)=>{
 
-          console.log('RESPONSE.TEXT', responseText );
-
           const orderId = responseText;
           // store orderId 
           console.log('Storing the order of item=', item.name, 'as orderid=', orderId);
