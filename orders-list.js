@@ -36,8 +36,8 @@ export default class OrderListComponent extends Component {
 
     goToMap( orderId ) {
         console.log( 'going to map for order=', orderId);
-        // const { navigate } = this.props.navigation;
-        // navigate('Map', { orderId })
+        const { navigate } = this.props.navigation;
+        navigate('Map', { orderId })
     }
 
   render() {

@@ -1,6 +1,6 @@
 import ShoppingListComponent from './shopping-list';
 import ItemDetailComponent from './item-detail';
-import MyOrdersComponent from './my-orders';
+import OrdersMapComponent from './orders-map';
 import OrdersListComponent from './orders-list';
 
 import React, { Component } from 'react';
@@ -29,11 +29,18 @@ const Stacc = StackNavigator({
 });
 
 const OrderStack = StackNavigator({
-  Order: {
+  List: {
     screen: OrdersListComponent,
     navigationOptions: ({ navigation }) =>({
       title: 'My Orders',
       headerLeft: <Icon name="menu" size={35} onPress={ () => navigation.navigate('DrawerOpen') } />
+    })
+  },
+  Map: {
+    screen: OrdersMapComponent,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Tracking',
+      headerLeft: <Icon name="menu" size={35} onPress={() => navigation.navigate('DrawerOpen')} />
     })
   }
 });
